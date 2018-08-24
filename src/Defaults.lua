@@ -8,7 +8,6 @@
 
 local defaults = {
     debugMode = 0,
-    showEmptyStacks = false,
     positionLeft = 800,
     positionTop = 600,
     size = 100,
