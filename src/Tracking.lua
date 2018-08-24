@@ -8,7 +8,6 @@
 
 local BLOOD_SCENT_ID = 111387
 local FRENZIED_ID = 111386
-local currentStack = 0
 local updateIntervalMs = 100
 
 MOON.timeOfProc = 0
@@ -44,17 +43,7 @@ function MOON.OnEffectChanged(_, changeType, _, effectName, unitTag, _, _,
     -- If we have a stack
     if stackCount > 0 then
         MOON:Trace(2, "Stack for Ability ID: " .. effectAbilityId)
-
-        if changeType == EFFECT_RESULT_FADED then
-            currentStack = 0
-            MOON:Trace(2, "Faded on stack #" .. stackCount)
-            MOON.UpdateStacks(currentStack)
-        else
-            currentStack = stackCount
-            MOON:Trace(1, "Stack #" .. currentStack)
-            MOON.UpdateStacks(currentStack)
-        end
-
+        MOON.UpdateStacks(stackCount)
         return
     end
 
