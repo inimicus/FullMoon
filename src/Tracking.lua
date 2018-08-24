@@ -53,6 +53,7 @@ function MOON.OnEffectChanged(_, changeType, _, effectName, unitTag, _, _,
         MOON.timeOfProc = GetGameTimeMilliseconds()
         MOON.onCooldown = true
         MOON.Frenzied(true)
+        MOON.Update() -- Manually call first update
         EVENT_MANAGER:RegisterForUpdate(MOON.name .. "FRENZIED", updateIntervalMs, MOON.Update)
         return
     end
@@ -60,6 +61,7 @@ function MOON.OnEffectChanged(_, changeType, _, effectName, unitTag, _, _,
     if changeType == EFFECT_RESULT_FADED then
         MOON:Trace(2, "No longer Frenzied!")
         MOON.Frenzied(false)
+        MOON.Update() -- Manually call update to keep sync
         return
     end
 
