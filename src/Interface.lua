@@ -134,7 +134,16 @@ function MOON.Update()
             MOON.Label:SetText("0")
             MOON.Label:SetColor(0.12, 0.11, 0.18, 1)
         elseif cooldownCountdown < 10 then
-            MOON.Label:SetText(string.format("%.1f", cooldownCountdown))
+
+            local output = string.format("%.1f", cooldownCountdown)
+
+            -- Silly fix for 10.0 still showing up
+            if output == "10.0" then
+                MOON.Label:SetText("10")
+            else 
+                MOON.Label:SetText(output)
+            end
+
         else
             MOON.Label:SetText(string.format("%.0f", cooldownCountdown))
         end
