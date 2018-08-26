@@ -28,11 +28,43 @@ function MOON.RegisterEvents()
         REGISTER_FILTER_ABILITY_ID, FRENZIED_ID,
         REGISTER_FILTER_SOURCE_COMBAT_UNIT_TYPE, COMBAT_UNIT_TYPE_PLAYER)
 
+    -- Combat State
+    if MOON.preferences.showOOC then
+        MOON.RegisterCombatEvent()
+    end
+
 end
 
 function MOON.UnregisterEvents()
     EVENT_MANAGER:UnregisterForEvent(MOON.name .. "BLOOD_SCENT", EVENT_EFFECT_CHANGED)
     EVENT_MANAGER:UnregisterForEvent(MOON.name .. "FRENZIED", EVENT_EFFECT_CHANGED)
+
+    if MOON.preferences.showOOC then
+        MOON.UnregisterCombatEvent()
+    end
+end
+
+function MOON.RegisterCombatEvent()
+    EVENT_MANAGER:RegisterForEvent(name, EVENT_PLAYER_COMBAT_STATE, function(...) MOON.IsInCombat(...) end)
+end
+
+function MOON.UnregisterCombatEvent()
+    EVENT_MANAGER:UnregisterForEvent(MOON.name, EVENT_PLAYER_COMBAT_STATE)
+end
+
+function MOON.IsInCombat(_, inCombat)
+    MOON.isInCombat = inCombat
+
+    if inCombat then
+        MOON:Trace(2, "Entered Combat")
+        MOON.HUDHidden = false
+        MOON.Container:SetHidden(false)
+    else
+        MOON:Trace(2, "Left Combat")
+        MOON.HUDHidden = true
+        MOON.Container:SetHidden(true)
+    end
+
 end
 
 function MOON.OnEffectChanged(_, changeType, _, effectName, unitTag, _, _,

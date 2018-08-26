@@ -12,6 +12,7 @@ local defaults = {
     positionTop = 600,
     size = 100,
     unlocked = true,
+    showOOC = true,
 }
 
 function MOON:GetDefaults()
