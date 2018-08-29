@@ -72,29 +72,38 @@ function MOON.OnEffectChanged(_, changeType, _, effectName, unitTag, _, _,
 
     MOON:Trace(3, effectName .. " (" .. effectAbilityId .. ")")
 
-    -- If we have a stack
-    if stackCount > 0 then
-        MOON:Trace(2, "Stack for Ability ID: " .. effectAbilityId)
-        MOON.UpdateStacks(stackCount)
-        return
+    -- If Blood Scent Stack
+    if effectAbilityId == BLOOD_SCENT_ID then
+
+        MOON:Trace(2, zo_strformat("Stack #<<1>> for Ability ID: <<2>>", stackCount, effectAbilityId))
+
+        -- Set to zero if stacks faded
+        if changeType == EFFECT_RESULT_FADED then
+            MOON.UpdateStacks(0)
+        else
+            MOON.UpdateStacks(stackCount)
+        end
+
     end
 
-    -- Not a stack
-    if changeType == EFFECT_RESULT_GAINED then
-        MOON:Trace(2, "Frenzied!")
-        MOON.timeOfProc = GetGameTimeMilliseconds()
-        MOON.onCooldown = true
-        MOON.Frenzied(true)
-        MOON.Update() -- Manually call first update
-        EVENT_MANAGER:RegisterForUpdate(MOON.name .. "FRENZIED", updateIntervalMs, MOON.Update)
-        return
-    end
+    -- If Frenzied
+    if effectAbilityId == FRENZIED_ID then
+        if changeType == EFFECT_RESULT_GAINED then
+            MOON:Trace(2, "Frenzied!")
+            MOON.timeOfProc = GetGameTimeMilliseconds()
+            MOON.onCooldown = true
+            MOON.Frenzied(true)
+            MOON.Update() -- Manually call first update
+            EVENT_MANAGER:RegisterForUpdate(MOON.name .. "FRENZIED", updateIntervalMs, MOON.Update)
+            return
+        end
 
-    if changeType == EFFECT_RESULT_FADED then
-        MOON:Trace(2, "No longer Frenzied!")
-        MOON.Frenzied(false)
-        MOON.Update() -- Manually call update to keep sync
-        return
+        if changeType == EFFECT_RESULT_FADED then
+            MOON:Trace(2, "No longer Frenzied!")
+            MOON.Frenzied(false)
+            MOON.Update() -- Manually call update to keep sync
+            return
+        end
     end
 
 end
