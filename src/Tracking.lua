@@ -17,13 +17,13 @@ MOON.cooldownDurationMs = 18000
 function MOON.RegisterEvents()
 
     -- Blood Scent
-    EVENT_MANAGER:RegisterForEvent(MOON.name .. "BLOOD_SCENT", EVENT_EFFECT_CHANGED, function(...) MOON.OnEffectChanged(...) end)
+    EVENT_MANAGER:RegisterForEvent(MOON.name .. "BLOOD_SCENT", EVENT_EFFECT_CHANGED, function(...) MOON.OnBloodScent(...) end)
     EVENT_MANAGER:AddFilterForEvent(MOON.name .. "BLOOD_SCENT", EVENT_EFFECT_CHANGED,
         REGISTER_FILTER_ABILITY_ID, BLOOD_SCENT_ID,
         REGISTER_FILTER_SOURCE_COMBAT_UNIT_TYPE, COMBAT_UNIT_TYPE_PLAYER)
 
     -- Frenzied
-    EVENT_MANAGER:RegisterForEvent(MOON.name .. "FRENZIED", EVENT_EFFECT_CHANGED, function(...) MOON.OnEffectChanged(...) end)
+    EVENT_MANAGER:RegisterForEvent(MOON.name .. "FRENZIED", EVENT_EFFECT_CHANGED, function(...) MOON.OnFrenzied(...) end)
     EVENT_MANAGER:AddFilterForEvent(MOON.name .. "FRENZIED", EVENT_EFFECT_CHANGED,
         REGISTER_FILTER_ABILITY_ID, FRENZIED_ID,
         REGISTER_FILTER_SOURCE_COMBAT_UNIT_TYPE, COMBAT_UNIT_TYPE_PLAYER)
@@ -45,65 +45,57 @@ function MOON.UnregisterEvents()
 end
 
 function MOON.RegisterCombatEvent()
-    EVENT_MANAGER:RegisterForEvent(name, EVENT_PLAYER_COMBAT_STATE, function(...) MOON.IsInCombat(...) end)
+    EVENT_MANAGER:RegisterForEvent(MOON.name .. "COMBAT", EVENT_PLAYER_COMBAT_STATE, function(...) MOON.IsInCombat(...) end)
+    MOON:Trace(2, "Registered combat events")
 end
 
 function MOON.UnregisterCombatEvent()
-    EVENT_MANAGER:UnregisterForEvent(MOON.name, EVENT_PLAYER_COMBAT_STATE)
+    EVENT_MANAGER:UnregisterForEvent(MOON.name .. "COMBAT", EVENT_PLAYER_COMBAT_STATE)
+    MOON:Trace(2, "Unregistered combat events")
 end
 
 function MOON.IsInCombat(_, inCombat)
     MOON.isInCombat = inCombat
+    MOON:Trace(2, zo_strformat("In Combat: <<1>>", tostring(inCombat)))
+    MOON:SetCombatStateDisplay() 
+end
 
-    if inCombat then
-        MOON:Trace(2, "Entered Combat")
-        MOON.HUDHidden = false
-        MOON.Container:SetHidden(false)
+function MOON.OnBloodScent(_, changeType, _, effectName, _, _, _, stackCount,
+        _, _, _, _, _, _, _, effectAbilityId)
+
+    MOON:Trace(3, effectName .. " (" .. effectAbilityId .. ")")
+
+    -- Set to zero if stacks faded
+    if changeType == EFFECT_RESULT_FADED then
+        MOON:Trace(2, zo_strformat("Stack faded on #<<1>> for <<2>> (<<3>>), setting stacks to zero.", stackCount, effectName, effectAbilityId))
+        MOON.UpdateStacks(0)
     else
-        MOON:Trace(2, "Left Combat")
-        MOON.HUDHidden = true
-        MOON.Container:SetHidden(true)
+        MOON:Trace(2, zo_strformat("Stack #<<1>> for <<2>> (<<3>>)", stackCount, effectName, effectAbilityId))
+        MOON.UpdateStacks(stackCount)
     end
 
 end
 
-function MOON.OnEffectChanged(_, changeType, _, effectName, unitTag, _, _,
-        stackCount, _, _, _, _, _, _, _, effectAbilityId)
+function MOON.OnFrenzied(_, changeType, _, effectName, _, _, _, _, _, _,
+        _, _, _, _, _, effectAbilityId)
 
-    MOON:Trace(3, effectName .. " (" .. effectAbilityId .. ")")
+    MOON:Trace(3, zo_strformat("<<1>> (<<2>>)", effectName, effectAbilityId))
 
-    -- If Blood Scent Stack
-    if effectAbilityId == BLOOD_SCENT_ID then
-
-        MOON:Trace(2, zo_strformat("Stack #<<1>> for Ability ID: <<2>>", stackCount, effectAbilityId))
-
-        -- Set to zero if stacks faded
-        if changeType == EFFECT_RESULT_FADED then
-            MOON.UpdateStacks(0)
-        else
-            MOON.UpdateStacks(stackCount)
-        end
-
+    if changeType == EFFECT_RESULT_GAINED then
+        MOON:Trace(2, "Frenzied!")
+        MOON.timeOfProc = GetGameTimeMilliseconds()
+        MOON.onCooldown = true
+        MOON.Frenzied(true)
+        MOON.Update() -- Manually call first update
+        EVENT_MANAGER:RegisterForUpdate(MOON.name .. "FRENZIED", updateIntervalMs, MOON.Update)
+        return
     end
 
-    -- If Frenzied
-    if effectAbilityId == FRENZIED_ID then
-        if changeType == EFFECT_RESULT_GAINED then
-            MOON:Trace(2, "Frenzied!")
-            MOON.timeOfProc = GetGameTimeMilliseconds()
-            MOON.onCooldown = true
-            MOON.Frenzied(true)
-            MOON.Update() -- Manually call first update
-            EVENT_MANAGER:RegisterForUpdate(MOON.name .. "FRENZIED", updateIntervalMs, MOON.Update)
-            return
-        end
-
-        if changeType == EFFECT_RESULT_FADED then
-            MOON:Trace(2, "No longer Frenzied!")
-            MOON.Frenzied(false)
-            MOON.Update() -- Manually call update to keep sync
-            return
-        end
+    if changeType == EFFECT_RESULT_FADED then
+        MOON:Trace(2, "No longer Frenzied!")
+        MOON.Frenzied(false)
+        MOON.Update() -- Manually call update to keep sync
+        return
     end
 
 end
