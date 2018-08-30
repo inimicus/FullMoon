@@ -53,8 +53,8 @@ function MOON.Initialize(event, addonName)
 
     MOON:InitSettings()
     MOON.DrawUI()
-    MOON.ToggleHUD()
     MOON.RegisterEvents()
+    MOON.ToggleHUD()
 
     MOON:Trace(2, "Finished Initialize()")
 end

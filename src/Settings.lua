@@ -39,12 +39,12 @@ local optionsTable = {
     },
     [4] = {
         type = "header",
-        name = "Style",
+        name = "Display",
         width = "full",
     },
     [5] = {
         type = "slider",
-        name = "Display Size",
+        name = "Size",
         tooltip = "Display size of counter.",
         min = 32,
         max = 512,
@@ -53,6 +53,14 @@ local optionsTable = {
         setFunc = function(value) SetSize(value) end,
         width = "full",
         default = 40,
+    },
+    [6] = {
+        type = "checkbox",
+        name = "Hide Out of Combat",
+        tooltip = "Only show display while in combat, otherwise hide display",
+        getFunc = function() return GetHideOutOfCombat() end,
+        setFunc = function(value) SetHideOutOfCombat(value) end,
+        width = "full",
     },
 }
 
@@ -97,6 +105,22 @@ end
 
 function GetSize()
     return MOON.preferences.size
+end
+
+-- Show In Combat
+function SetHideOutOfCombat(value)
+    MOON.preferences.hideOOC = value
+
+    if value then
+        MOON.RegisterCombatEvent()
+    else
+        MOON.UnregisterCombatEvent()
+    end
+
+end
+
+function GetHideOutOfCombat()
+    return MOON.preferences.hideOOC
 end
 
 -- -----------------------------------------------------------------------------

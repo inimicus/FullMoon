@@ -52,7 +52,7 @@ function toggleDraggable(state)
     if MOON.preferences.unlocked then
         if state then
             WINDOW_MANAGER:SetMouseCursor(12)
-        else 
+        else
             WINDOW_MANAGER:SetMouseCursor(0)
         end
     end
@@ -62,25 +62,42 @@ function MOON.ToggleHUD()
     local hudScene = SCENE_MANAGER:GetScene("hud")
     hudScene:RegisterCallback("StateChange", function(oldState, newState)
 
+    MOON:Trace(2, "Hit ToggleHUD()")
         -- Don't change states if display should be forced to show
         if MOON.ForceShow then return end
 
         -- Transitioning to a menu/non-HUD
         if newState == SCENE_HIDDEN and SCENE_MANAGER:GetNextScene():GetName() ~= "hudui" then
-            MOON:Trace(3, "Hiding HUD")
-            MOON.HUDHidden = true
-            MOON.Container:SetHidden(true)
+            MOON:HideDisplay(true)
         end
 
         -- Transitioning to a HUD/non-menu
         if newState == SCENE_SHOWING then
-            MOON:Trace(3, "Showing HUD")
-            MOON.HUDHidden = false
-            MOON.Container:SetHidden(false)
+            MOON:SetCombatStateDisplay()
         end
     end)
 
     MOON:Trace(2, "Finished ToggleHUD()")
+end
+
+function MOON:HideDisplay(state)
+    MOON:Trace(3, zo_strformat("HUD Hidden: <<1>>", tostring(state)))
+    MOON.HUDHidden = state
+    MOON.Container:SetHidden(state)
+end
+
+function MOON:SetCombatStateDisplay()
+    MOON:Trace(3, zo_strformat("Setting combat state display, in combat: <<1>>", tostring(MOON.isInCombat)))
+
+    if MOON.isInCombat then
+        MOON:HideDisplay(false)
+    else
+        if MOON.preferences.hideOOC then
+            MOON:HideDisplay(true)
+        else
+            MOON:HideDisplay(false)
+        end
+    end
 end
 
 function MOON.OnMoveStop()
@@ -140,7 +157,7 @@ function MOON.Update()
             -- Silly fix for 10.0 still showing up
             if output == "10.0" then
                 MOON.Label:SetText("10")
-            else 
+            else
                 MOON.Label:SetText(output)
             end
 
@@ -148,7 +165,7 @@ function MOON.Update()
             MOON.Label:SetText(string.format("%.0f", cooldownCountdown))
         end
 
-    else 
+    else
         EVENT_MANAGER:UnregisterForUpdate(MOON.name .. "FRENZIED")
     end
 
@@ -168,7 +185,7 @@ function MOON.Frenzied(isFrenzied)
         MOON.Texture:SetTexture("FullMoon/art/textures/BloodMoon.dds")
         MOON.Label:SetColor(1, 0.88, 0.70, 1)
         --PlaySound(SOUNDS.TELVAR_GAINED)
-    else 
+    else
         MOON.Texture:SetTexture("FullMoon/art/textures/FullMoon.dds")
         MOON.Label:SetColor(0.22, 0.2, 0.31, 0.85)
     end
