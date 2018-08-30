@@ -57,7 +57,7 @@ end
 function MOON.IsInCombat(_, inCombat)
     MOON.isInCombat = inCombat
     MOON:Trace(2, zo_strformat("In Combat: <<1>>", tostring(inCombat)))
-    MOON:SetCombatStateDisplay() 
+    MOON:SetCombatStateDisplay()
 end
 
 function MOON.OnBloodScent(_, changeType, _, effectName, _, _, _, stackCount,
