@@ -28,6 +28,10 @@ function MOON.RegisterEvents()
         REGISTER_FILTER_ABILITY_ID, FRENZIED_ID,
         REGISTER_FILTER_SOURCE_COMBAT_UNIT_TYPE, COMBAT_UNIT_TYPE_PLAYER)
 
+	-- Hide/Show on Death/Alive
+    EVENT_MANAGER:RegisterForEvent(MOON.name, EVENT_PLAYER_ALIVE, MOON.OnAlive)
+    EVENT_MANAGER:RegisterForEvent(MOON.name, EVENT_PLAYER_DEAD, MOON.OnDeath)
+
     -- Combat State
     if MOON.preferences.hideOOC then
         MOON.RegisterCombatEvent()
@@ -38,10 +42,20 @@ end
 function MOON.UnregisterEvents()
     EVENT_MANAGER:UnregisterForEvent(MOON.name .. "BLOOD_SCENT", EVENT_EFFECT_CHANGED)
     EVENT_MANAGER:UnregisterForEvent(MOON.name .. "FRENZIED", EVENT_EFFECT_CHANGED)
+    EVENT_MANAGER:UnregisterForEvent(MOON.name, EVENT_PLAYER_ALIVE)
+    EVENT_MANAGER:UnregisterForEvent(MOON.name, EVENT_PLAYER_DEAD)
 
     if MOON.preferences.showOOC then
         MOON.UnregisterCombatEvent()
     end
+end
+
+function MOON.OnAlive()
+    MOON:SetCombatStateDisplay()
+end
+
+function MOON.OnDeath()
+    MOON:HideDisplay(true)
 end
 
 function MOON.RegisterCombatEvent()
