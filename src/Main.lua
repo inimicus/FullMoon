@@ -54,6 +54,8 @@ function MOON.Initialize(event, addonName)
     MOON:InitSettings()
     MOON.DrawUI()
     MOON.RegisterEvents()
+    MOON.Equipped:FilterBySetName('Blood Moon')
+    MOON.Equipped:Register(MOON.SetDidUpdate)
     MOON.ToggleHUD()
 
     MOON:Trace(2, "Finished Initialize()")

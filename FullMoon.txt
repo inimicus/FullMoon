@@ -26,5 +26,6 @@ lib/LibAddonMenu-2.0/controls/divider.lua
 src/Main.lua
 src/Tracking.lua
 src/Defaults.lua
+src/Equipped.lua
 src/Settings.lua
 src/Interface.lua
