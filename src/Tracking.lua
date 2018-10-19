@@ -28,7 +28,7 @@ function MOON.RegisterEvents()
         REGISTER_FILTER_ABILITY_ID, FRENZIED_ID,
         REGISTER_FILTER_SOURCE_COMBAT_UNIT_TYPE, COMBAT_UNIT_TYPE_PLAYER)
 
-	-- Hide/Show on Death/Alive
+    -- Hide/Show on Death/Alive
     EVENT_MANAGER:RegisterForEvent(MOON.name, EVENT_PLAYER_ALIVE, MOON.OnAlive)
     EVENT_MANAGER:RegisterForEvent(MOON.name, EVENT_PLAYER_DEAD, MOON.OnDeath)
 
