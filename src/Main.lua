@@ -16,6 +16,7 @@ MOON.ForceShow  = false
 MOON.onCooldown = false
 MOON.onProc     = false
 MOON.isInCombat = false
+MOON.isDead     = false
 
 -- -----------------------------------------------------------------------------
 -- Level of debug output
@@ -50,6 +51,11 @@ function MOON.Initialize(event, addonName)
     end
 
     SLASH_COMMANDS[MOON.slash] = MOON.SlashCommand
+
+    -- Update initial combat/dead state
+    -- In the event that UI is loaded mid-combat or while dead
+    MOON.isInCombat = IsUnitInCombat("player")
+    MOON.isDead = IsUnitDead("player")
 
     MOON:InitSettings()
     MOON.DrawUI()

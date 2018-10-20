@@ -62,17 +62,18 @@ function MOON.ToggleHUD()
     local hudScene = SCENE_MANAGER:GetScene("hud")
     hudScene:RegisterCallback("StateChange", function(oldState, newState)
 
-    MOON:Trace(2, "Hit ToggleHUD()")
         -- Don't change states if display should be forced to show
         if MOON.ForceShow then return end
 
         -- Transitioning to a menu/non-HUD
         if newState == SCENE_HIDDEN and SCENE_MANAGER:GetNextScene():GetName() ~= "hudui" then
-            MOON:HideDisplay(true)
+            MOON.HUDHidden = true
+            MOON:SetCombatStateDisplay()
         end
 
         -- Transitioning to a HUD/non-menu
         if newState == SCENE_SHOWING then
+            MOON.HUDHidden = false
             MOON:SetCombatStateDisplay()
         end
     end)
@@ -80,23 +81,28 @@ function MOON.ToggleHUD()
     MOON:Trace(2, "Finished ToggleHUD()")
 end
 
-function MOON:HideDisplay(state)
-    MOON:Trace(3, zo_strformat("HUD Hidden: <<1>>", tostring(state)))
-    MOON.HUDHidden = state
-    MOON.Container:SetHidden(state)
+function MOON:ShowIcon(state)
+    MOON:Trace(3, zo_strformat("Show Icon: <<1>>", tostring(state)))
+    --MOON.HUDHidden = state
+    if MOON.ForceShow then
+        MOON.Container:SetHidden(false)
+    elseif state and not MOON.HUDHidden then
+        MOON.Container:SetHidden(false)
+    else
+        MOON.Container:SetHidden(true)
+    end
 end
 
 function MOON:SetCombatStateDisplay()
-    MOON:Trace(3, zo_strformat("Setting combat state display, in combat: <<1>>", tostring(MOON.isInCombat)))
+    MOON:Trace(3, zo_strformat("Setting combat state display - inCombat: <<1>> HideOOC: <<2>> isDead: <<3>>",
+        tostring(MOON.isInCombat),
+        tostring(MOON.preferences.hideOOC),
+        tostring(MOON.isDead)))
 
-    if MOON.isInCombat then
-        MOON:HideDisplay(false)
+    if (MOON.isInCombat or not MOON.preferences.hideOOC) and not MOON.isDead then
+        MOON:ShowIcon(true)
     else
-        if MOON.preferences.hideOOC then
-            MOON:HideDisplay(true)
-        else
-            MOON:HideDisplay(false)
-        end
+        MOON:ShowIcon(false)
     end
 end
 
