@@ -7,11 +7,16 @@
 -- -----------------------------------------------------------------------------
 
 MOON.Equipped = {}
-Callback = nil
+
+-- User-provided vars
+local EquipmentUpdateCallback = nil
 local filterBySetName = nil
+
+-- Equipment/Set Bonus Tables
 local items = {}
 local sets = {}
 
+-- Slots to monitor
 local ITEM_SLOTS = {
     EQUIP_SLOT_HEAD,
     EQUIP_SLOT_NECK,
@@ -28,7 +33,6 @@ local ITEM_SLOTS = {
     EQUIP_SLOT_BACKUP_MAIN,
     EQUIP_SLOT_BACKUP_OFF,
 }
-
 
 local function GetNumSetBonuses(itemLink)
     -- 2H weapons, staves, bows count as two set pieces
@@ -86,12 +90,12 @@ local function UpdateEnabledSets()
             if totalBonus >= set.maxBonus then
                 if not set.equippedMax then
                     set.equippedMax = true
-                    Callback(key, true)
+                    EquipmentUpdateCallback(key, true)
                 end
             else
                 if set.equippedMax then
                     set.equippedMax = false
-                    Callback(key, false)
+                    EquipmentUpdateCallback(key, false)
                 end
             end
 
@@ -162,7 +166,7 @@ function MOON.Equipped:Register(callback)
         REGISTER_FILTER_BAG_ID, BAG_WORN,
         REGISTER_FILTER_INVENTORY_UPDATE_REASON, INVENTORY_UPDATE_REASON_DEFAULT)
 
-    Callback = function(...) callback(...) end
+    EquipmentUpdateCallback = function(...) callback(...) end
 
     UpdateAllSlots()
 end
