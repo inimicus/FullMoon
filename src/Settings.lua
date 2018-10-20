@@ -74,6 +74,7 @@ local function SetHideOutOfCombat(value)
 
     if value then
         MOON.RegisterCombatEvent()
+        MOON.isInCombat = IsUnitInCombat("player")
     else
         MOON.UnregisterCombatEvent()
     end
