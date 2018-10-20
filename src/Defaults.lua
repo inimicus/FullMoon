@@ -13,6 +13,8 @@ local defaults = {
     size = 100,
     unlocked = true,
     hideOOC = false,
+    soundEnabled = false,
+    sound = nil,
 }
 
 function MOON:GetDefaults()

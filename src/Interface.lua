@@ -61,6 +61,10 @@ function MOON.SetFontSize(size)
     MOON.Label:SetScale(scale)
 end
 
+function MOON.PlaySound(sound)
+    PlaySound(SOUNDS[sound])
+end
+
 function toggleDraggable(state)
     if MOON.preferences.unlocked then
         if state then
@@ -205,7 +209,9 @@ function MOON.Frenzied(isFrenzied)
     if isFrenzied then
         MOON.Texture:SetTexture("FullMoon/art/textures/BloodMoon.dds")
         MOON.Label:SetColor(1, 0.88, 0.70, 1)
-        --PlaySound(SOUNDS.TELVAR_GAINED)
+        if MOON.preferences.soundEnabled then
+            MOON.PlaySound(MOON.preferences.sound)
+        end
     else
         MOON.Texture:SetTexture("FullMoon/art/textures/FullMoon.dds")
         MOON.Label:SetColor(0.22, 0.2, 0.31, 0.85)
