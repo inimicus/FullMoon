@@ -1,12 +1,20 @@
 -- -----------------------------------------------------------------------------
--- Full Moon
+-- LibEquipmentBonus
 -- Author:  g4rr3t
 -- Created: Oct 19, 2018
 --
--- Equipped.lua
+-- LibEquipmentBonus.lua
 -- -----------------------------------------------------------------------------
 
-MOON.Equipped = {}
+-- Register LEB with LibStub
+local MAJOR, MINOR = "LibEquipmentBonus", 1
+local leb, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
+
+-- Exit if same or more recent version is already loaded
+if not leb then return end
+
+local libName = 'LibEquipmentBonus'
+local prefix = '[LibEquipmentBonus] '
 
 -- User-provided vars
 local EquipmentUpdateCallback = nil
@@ -33,6 +41,20 @@ local ITEM_SLOTS = {
     EQUIP_SLOT_BACKUP_MAIN,
     EQUIP_SLOT_BACKUP_OFF,
 }
+
+-- -----------------------------------------------------------------------------
+-- Level of debug output
+-- 1: Low    - Basic debug info, show core functionality
+-- 2: Medium - More information about skills and addon details
+-- 3: High   - Everything
+local debugMode = 0
+-- -----------------------------------------------------------------------------
+
+local function Trace(debugLevel, ...)
+    if debugLevel <= debugMode then
+        d(prefix .. ...)
+    end
+end
 
 local function GetNumSetBonuses(itemLink)
     -- 2H weapons, staves, bows count as two set pieces
@@ -111,17 +133,17 @@ local function UpdateSingleSlot(slotId, itemLink)
 
     -- Item did not change
     if itemLink == previousLink then
-        MOON:Trace(1, zo_strformat("Same item equipped: <<1>>", itemLink))
+        Trace(1, zo_strformat("Same item equipped: <<1>>", itemLink))
         return
 
     -- Item Removed (slot empty)
     elseif itemLink == '' then
-        MOON:Trace(1, zo_strformat("Item unequipped: <<1>>", previousLink))
+        Trace(1, zo_strformat("Item unequipped: <<1>>", previousLink))
         RemoveSetBonus(slotId, previousLink)
 
     -- Item Changed
     else
-        MOON:Trace(1, zo_strformat("New item equipped: <<1>>", itemLink))
+        Trace(1, zo_strformat("New item equipped: <<1>>", itemLink))
         RemoveSetBonus(slotId, previousLink)
         AddSetBonus(slotId, itemLink)
     end
@@ -150,19 +172,22 @@ local function UpdateAllSlots()
     UpdateEnabledSets()
 end
 
-function MOON.Equipped:FilterBySetName(setName)
+function leb:SetDebug(debugLevel)
+    debugMode = debugLevel
+end
+
+function leb:FilterBySetName(setName)
     filterBySetName = setName
 end
 
-function MOON.Equipped:Register(callback)
+function leb:Register(callback)
     if callback == nil then
-        -- Error
-        d('[EquipmentBonus] Callback function required!')
+        Trace(0, 'Callback function required!')
         return
     end
 
-    EVENT_MANAGER:RegisterForEvent(MOON.name, EVENT_INVENTORY_SINGLE_SLOT_UPDATE, WornSlotUpdate)
-    EVENT_MANAGER:AddFilterForEvent(MOON.name, EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
+    EVENT_MANAGER:RegisterForEvent(libName, EVENT_INVENTORY_SINGLE_SLOT_UPDATE, WornSlotUpdate)
+    EVENT_MANAGER:AddFilterForEvent(libName, EVENT_INVENTORY_SINGLE_SLOT_UPDATE,
         REGISTER_FILTER_BAG_ID, BAG_WORN,
         REGISTER_FILTER_INVENTORY_UPDATE_REASON, INVENTORY_UPDATE_REASON_DEFAULT)
 

@@ -17,6 +17,7 @@ MOON.onCooldown = false
 MOON.onProc     = false
 MOON.isInCombat = false
 MOON.isDead     = false
+MOON.enabled    = false
 
 -- -----------------------------------------------------------------------------
 -- Level of debug output
@@ -59,9 +60,12 @@ function MOON.Initialize(event, addonName)
 
     MOON:InitSettings()
     MOON.DrawUI()
-    MOON.RegisterEvents()
-    MOON.Equipped:FilterBySetName('Blood Moon')
-    MOON.Equipped:Register(MOON.SetDidUpdate)
+
+    -- Configure and register LibEquipmentBonus
+    local LEB = LibStub("LibEquipmentBonus")
+    LEB:FilterBySetName('Blood Moon')
+    LEB:Register(MOON.SetDidUpdate)
+
     MOON.ToggleHUD()
 
     MOON:Trace(2, "Finished Initialize()")

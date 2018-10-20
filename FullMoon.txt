@@ -4,9 +4,10 @@
 ## Description: Tracks stacks, proc state, and cooldown of the Blood Moon set.
 ## Version: 1.2.0
 ## Author: |cFFCCCC@g4rr3t|r
-## OptionalDependsOn:  LibAddonMenu-2.0
+## OptionalDependsOn:  LibAddonMenu-2.0 LibEquipmentBonus
 
 lib/LibStub/LibStub.lua
+lib/LibEquipmentBonus/LibEquipmentBonus.lua
 lib/LibAddonMenu-2.0/LibAddonMenu-2.0.lua
 lib/LibAddonMenu-2.0/controls/panel.lua
 lib/LibAddonMenu-2.0/controls/submenu.lua
@@ -26,6 +27,5 @@ lib/LibAddonMenu-2.0/controls/divider.lua
 src/Main.lua
 src/Tracking.lua
 src/Defaults.lua
-src/Equipped.lua
 src/Settings.lua
 src/Interface.lua

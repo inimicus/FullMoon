@@ -93,11 +93,16 @@ function MOON.OnBloodScent(_, changeType, _, effectName, _, _, _, stackCount,
 end
 
 function MOON.SetDidUpdate(setName, equipped)
-    --MOON:Trace(1, zo_strformat("<<1>> equipped: <<2>>", setName, tostring(equipped)))
     if equipped then
-        d('Enabling Blood Moon')
+        MOON.enabled = true
+        MOON.RegisterEvents()
+        MOON.DrawUI()
+        MOON:Trace(1, 'Enabling Blood Moon tracking')
     else
-        d('Disabling Blood Moon')
+        MOON.enabled = false
+        MOON.UnregisterEvents()
+        MOON.DrawUI()
+        MOON:Trace(1, 'Disabling Blood Moon tracking')
     end
 end
 

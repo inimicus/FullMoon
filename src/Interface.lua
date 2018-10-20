@@ -7,38 +7,51 @@
 -- -----------------------------------------------------------------------------
 
 function MOON.DrawUI()
-    local c = WINDOW_MANAGER:CreateTopLevelWindow("MOONContainer")
-    c:SetClampedToScreen(true)
-    c:SetDimensions(MOON.preferences.size, MOON.preferences.size)
-    c:ClearAnchors()
-    c:SetMouseEnabled(true)
-    c:SetAlpha(1)
-    c:SetMovable(MOON.preferences.unlocked)
-    c:SetHidden(false)
-    c:SetHandler("OnMoveStop", function(...) MOON.SavePosition() end)
-    c:SetHandler("OnMouseEnter", function(...) toggleDraggable(true) end)
-    c:SetHandler("OnMouseExit", function(...) toggleDraggable(false) end)
 
-    local t = WINDOW_MANAGER:CreateControl("MOONTexture", c, CT_TEXTURE)
-    t:SetTexture("FullMoon/art/textures/FullMoon.dds")
-    t:SetDimensions(MOON.preferences.size, MOON.preferences.size)
-    t:SetAnchor(TOPLEFT, c, TOPLEFT, 0, 0)
+    local container = WINDOW_MANAGER:GetControlByName("MOONContainer")
 
-    local l = WINDOW_MANAGER:CreateControl("MOONLabel", c, CT_LABEL)
-    l:SetAnchor(CENTER, c, CENTER, 0, 0)
-    l:SetColor(0.12, 0.11, 0.18, 1)
-    l:SetFont("$(BOLD_FONT)|50|thin-outline")
-    l:SetVerticalAlignment(TOP)
-    l:SetHorizontalAlignment(LEFT)
-    l:SetPixelRoundingEnabled(true)
-    l:SetText("0")
+    if MOON.enabled then
+        if container == nil then
+            local c = WINDOW_MANAGER:CreateTopLevelWindow("MOONContainer")
+            c:SetClampedToScreen(true)
+            c:SetDimensions(MOON.preferences.size, MOON.preferences.size)
+            c:ClearAnchors()
+            c:SetMouseEnabled(true)
+            c:SetAlpha(1)
+            c:SetMovable(MOON.preferences.unlocked)
+            c:SetHidden(false)
+            c:SetHandler("OnMoveStop", function(...) MOON.SavePosition() end)
+            c:SetHandler("OnMouseEnter", function(...) toggleDraggable(true) end)
+            c:SetHandler("OnMouseExit", function(...) toggleDraggable(false) end)
 
-    MOON.Container = c
-    MOON.Texture = t
-    MOON.Label = l
+            local t = WINDOW_MANAGER:CreateControl("MOONTexture", c, CT_TEXTURE)
+            t:SetTexture("FullMoon/art/textures/FullMoon.dds")
+            t:SetDimensions(MOON.preferences.size, MOON.preferences.size)
+            t:SetAnchor(TOPLEFT, c, TOPLEFT, 0, 0)
 
-    MOON.SetFontSize(MOON.preferences.size)
-    MOON.SetPosition(MOON.preferences.positionLeft, MOON.preferences.positionTop)
+            local l = WINDOW_MANAGER:CreateControl("MOONLabel", c, CT_LABEL)
+            l:SetAnchor(CENTER, c, CENTER, 0, 0)
+            l:SetColor(0.12, 0.11, 0.18, 1)
+            l:SetFont("$(BOLD_FONT)|50|thin-outline")
+            l:SetVerticalAlignment(TOP)
+            l:SetHorizontalAlignment(LEFT)
+            l:SetPixelRoundingEnabled(true)
+            l:SetText("0")
+
+            MOON.Container = c
+            MOON.Texture = t
+            MOON.Label = l
+
+            MOON.SetFontSize(MOON.preferences.size)
+            MOON.SetPosition(MOON.preferences.positionLeft, MOON.preferences.positionTop)
+        else
+            MOON:ShowIcon(true)
+        end
+    else
+        if container ~= nil then
+            MOON:ShowIcon(false)
+        end
+    end
 
     MOON:Trace(2, "Finished DrawUI()")
 end
@@ -82,14 +95,16 @@ function MOON.ToggleHUD()
 end
 
 function MOON:ShowIcon(state)
-    MOON:Trace(3, zo_strformat("Show Icon: <<1>>", tostring(state)))
-    --MOON.HUDHidden = state
-    if MOON.ForceShow then
-        MOON.Container:SetHidden(false)
-    elseif state and not MOON.HUDHidden then
-        MOON.Container:SetHidden(false)
-    else
-        MOON.Container:SetHidden(true)
+    local container = WINDOW_MANAGER:GetControlByName("MOONContainer")
+    if MOON.enabled then
+        MOON:Trace(3, zo_strformat("Show Icon: <<1>>", tostring(state)))
+        if MOON.ForceShow then
+            MOON.Container:SetHidden(false)
+        elseif state and not MOON.HUDHidden then
+            MOON.Container:SetHidden(false)
+        else
+            MOON.Container:SetHidden(true)
+        end
     end
 end
 

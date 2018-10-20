@@ -71,36 +71,44 @@ local optionsTable = {
 -- Locked State
 function ToggleLocked(control)
     MOON.preferences.unlocked = not MOON.preferences.unlocked
-    MOON.Container:SetMovable(MOON.preferences.unlocked)
-    if MOON.preferences.unlocked then
-        control:SetText("Lock")
+    if (MOON.enabled) then
+        MOON.Container:SetMovable(MOON.preferences.unlocked)
+        if MOON.preferences.unlocked then
+            control:SetText("Lock")
+        else
+            control:SetText("Unlock")
+        end
     else
-        control:SetText("Unlock")
+        control:SetText("Not Equipped!")
     end
 end
 
 -- Force Showing
 function ForceShow(control)
     MOON.ForceShow = not MOON.ForceShow
-    if MOON.ForceShow then
-        control:SetText("Hide")
-        MOON.HUDHidden = false
-        MOON.Container:SetHidden(false)
-        MOON.UpdateStacks(5)
+    if (MOON.enabled) then
+        if MOON.ForceShow then
+            control:SetText("Hide")
+            MOON.UpdateStacks(5)
+            MOON:ShowIcon(true)
+        else
+            control:SetText("Show")
+            MOON.UpdateStacks(0)
+            MOON:ShowIcon(true)
+        end
     else
-        control:SetText("Show")
-        MOON.HUDHidden = true
-        MOON.Container:SetHidden(true)
-        MOON.UpdateStacks(0)
+        control:SetText("Not Equipped!")
     end
 end
 
 -- Sizing
 function SetSize(value)
     MOON.preferences.size = value
-    MOON.Container:SetDimensions(value, value)
-    MOON.Texture:SetDimensions(value, value)
-    MOON.SetFontSize(value)
+    if MOON.enabled then
+        MOON.Container:SetDimensions(value, value)
+        MOON.Texture:SetDimensions(value, value)
+        MOON.SetFontSize(value)
+    end
 end
 
 function GetSize()
@@ -116,6 +124,8 @@ function SetHideOutOfCombat(value)
     else
         MOON.UnregisterCombatEvent()
     end
+
+    MOON:SetCombatStateDisplay()
 
 end
 
