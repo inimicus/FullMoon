@@ -77,5 +77,5 @@ end
 -- Event Hooks
 -- -----------------------------------------------------------------------------
 
-EVENT_MANAGER:RegisterForEvent(MOON.name, EVENT_ADD_ON_LOADED, function(...) MOON.Initialize(...) end)
+EVENT_MANAGER:RegisterForEvent(MOON.name, EVENT_ADD_ON_LOADED, MOON.Initialize)
 
