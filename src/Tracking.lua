@@ -72,7 +72,7 @@ end
 
 function MOON.IsInCombat(_, inCombat)
     MOON.isInCombat = inCombat
-    MOON:Trace(2, zo_strformat("In Combat: <<1>>", tostring(inCombat)))
+    MOON:Trace(2, "In Combat: <<1>>", tostring(inCombat))
     MOON:SetCombatStateDisplay()
 end
 
@@ -83,10 +83,10 @@ function MOON.OnBloodScent(_, changeType, _, effectName, _, _, _, stackCount,
 
     -- Set to zero if stacks faded
     if changeType == EFFECT_RESULT_FADED then
-        MOON:Trace(2, zo_strformat("Stack faded on #<<1>> for <<2>> (<<3>>), setting stacks to zero.", stackCount, effectName, effectAbilityId))
+        MOON:Trace(2, "Stack faded on #<<1>> for <<2>> (<<3>>), setting stacks to zero.", stackCount, effectName, effectAbilityId)
         MOON.UpdateStacks(0)
     else
-        MOON:Trace(2, zo_strformat("Stack #<<1>> for <<2>> (<<3>>)", stackCount, effectName, effectAbilityId))
+        MOON:Trace(2, "Stack #<<1>> for <<2>> (<<3>>)", stackCount, effectName, effectAbilityId)
         MOON.UpdateStacks(stackCount)
     end
 
@@ -109,7 +109,7 @@ end
 function MOON.OnFrenzied(_, changeType, _, effectName, _, _, _, _, _, _,
         _, _, _, _, _, effectAbilityId)
 
-    MOON:Trace(3, zo_strformat("<<1>> (<<2>>)", effectName, effectAbilityId))
+    MOON:Trace(3, "<<1>> (<<2>>)", effectName, effectAbilityId)
 
     if changeType == EFFECT_RESULT_GAINED then
         MOON:Trace(2, "Frenzied!")

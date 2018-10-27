@@ -101,7 +101,7 @@ end
 function MOON:ShowIcon(state)
     local container = WINDOW_MANAGER:GetControlByName("MOONContainer")
     if MOON.enabled then
-        MOON:Trace(3, zo_strformat("Show Icon: <<1>>", tostring(state)))
+        MOON:Trace(3, "Show Icon: <<1>>", tostring(state))
         if MOON.ForceShow then
             MOON.Container:SetHidden(false)
         elseif state and not MOON.HUDHidden then
@@ -113,10 +113,10 @@ function MOON:ShowIcon(state)
 end
 
 function MOON:SetCombatStateDisplay()
-    MOON:Trace(3, zo_strformat("Setting combat state display - inCombat: <<1>> HideOOC: <<2>> isDead: <<3>>",
+    MOON:Trace(3, "Setting combat state display - inCombat: <<1>> HideOOC: <<2>> isDead: <<3>>",
         tostring(MOON.isInCombat),
         tostring(MOON.preferences.hideOOC),
-        tostring(MOON.isDead)))
+        tostring(MOON.isDead))
 
     if (MOON.isInCombat or not MOON.preferences.hideOOC) and not MOON.isDead then
         MOON:ShowIcon(true)

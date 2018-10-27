@@ -29,7 +29,8 @@ MOON.debugMode = 0
 
 function MOON:Trace(debugLevel, ...)
     if debugLevel <= MOON.debugMode then
-        d(MOON.prefix .. ...)
+        local message = zo_strformat(...)
+        d(MOON.prefix .. message)
     end
 end
 

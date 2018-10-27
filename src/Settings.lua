@@ -100,7 +100,7 @@ end
 
 local function PlayTestSound(setKey, condition)
     local sound = MOON.preferences.sound
-    MOON:Trace(2, zo_strformat("Testing sound <<1>>", sound))
+    MOON:Trace(2, "Testing sound <<1>>", sound)
     MOON.PlaySound(sound)
 end
 
