@@ -51,12 +51,12 @@ function MOON.UnregisterEvents()
 end
 
 function MOON.OnAlive()
-	MOON.isDead = false
+    MOON.isDead = false
     MOON:SetCombatStateDisplay()
 end
 
 function MOON.OnDeath()
-	MOON.isDead = true
+    MOON.isDead = true
     MOON:SetCombatStateDisplay()
 end
 
