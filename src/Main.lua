@@ -10,7 +10,7 @@ MOON.name       = "FullMoon"
 MOON.version    = "1.2.0"
 MOON.dbVersion  = 1
 MOON.slash      = "/moon"
-MOON.prefix     = "[moon] "
+MOON.prefix     = "[FullMoon] "
 MOON.HUDHidden  = false
 MOON.ForceShow  = false
 MOON.onCooldown = false
@@ -63,8 +63,9 @@ function MOON.Initialize(event, addonName)
 
     -- Configure and register LibEquipmentBonus
     local LEB = LibStub("LibEquipmentBonus")
-    LEB:FilterBySetName('Blood Moon')
-    LEB:Register(MOON.SetDidUpdate)
+    local Equip = LEB:Init(MOON.name)
+    Equip:FilterBySetName("Blood Moon")
+    Equip:Register(MOON.SetDidUpdate)
 
     MOON.ToggleHUD()
 
