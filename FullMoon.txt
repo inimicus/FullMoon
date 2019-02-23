@@ -3,7 +3,7 @@
 ## SavedVariables: FullMoonVariables
 ## Description: Tracks stacks, proc state, and cooldown of the Blood Moon set.
 ## Version: 1.2.2
-## Author: |cFFCCCC@g4rr3t|r
+## Author: |cFFCCCC@g4rr3t|r (NA)
 ## OptionalDependsOn:  LibAddonMenu-2.0 LibEquipmentBonus
 
 lib/LibStub/LibStub.lua
