@@ -1,5 +1,5 @@
 ## Title: Full Moon
-## APIVersion: 100024 100025
+## APIVersion: 100025 100026
 ## SavedVariables: FullMoonVariables
 ## Description: Tracks stacks, proc state, and cooldown of the Blood Moon set.
 ## Version: 1.2.1
