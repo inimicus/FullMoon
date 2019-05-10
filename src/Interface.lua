@@ -100,16 +100,17 @@ end
 
 function MOON:ShowIcon(state)
     local container = WINDOW_MANAGER:GetControlByName("MOONContainer")
-    if MOON.enabled then
-        MOON:Trace(3, "Show Icon: <<1>>", tostring(state))
+    MOON:Trace(3, "Show Icon: <<1>>", tostring(state))
+    if container ~= nil then
         if MOON.ForceShow then
-            MOON.Container:SetHidden(false)
-        elseif state and not MOON.HUDHidden then
-            MOON.Container:SetHidden(false)
+            container:SetHidden(false)
+        elseif (state and MOON.enabled and not MOON.HUDHidden) then
+            container:SetHidden(false)
         else
-            MOON.Container:SetHidden(true)
+            container:SetHidden(true)
         end
     end
+
 end
 
 function MOON:SetCombatStateDisplay()
