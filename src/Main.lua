@@ -7,7 +7,7 @@
 -- -----------------------------------------------------------------------------
 MOON            = {}
 MOON.name       = "FullMoon"
-MOON.version    = "1.2.2"
+MOON.version    = "1.2.3"
 MOON.dbVersion  = 1
 MOON.slash      = "/moon"
 MOON.prefix     = "[FullMoon] "
