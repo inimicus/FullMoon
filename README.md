@@ -4,6 +4,7 @@ Tracks stacks, proc state, and cooldown of the Blood Moon set.
 
 ## PLEASE NOTE
 Custom textures included. Restart your game client after installing.
+Thanks to Tonyleila for the awesome new and improved textures!
 
 <img src="https://github.com/inimicus/FullMoon/blob/master/art/gifs/FullMoon.png?raw=true"><br>
 
