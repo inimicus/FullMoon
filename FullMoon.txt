@@ -2,7 +2,7 @@
 ## APIVersion: 100026 100027
 ## SavedVariables: FullMoonVariables
 ## Description: Tracks stacks, proc state, and cooldown of the Blood Moon set.
-## Version: 1.2.3
+## Version: 1.2.4
 ## Author: |cFFCCCC@g4rr3t|r (NA)
 ## OptionalDependsOn:  LibAddonMenu-2.0 LibEquipmentBonus
 
